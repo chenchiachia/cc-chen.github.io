@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topology-Preserving Binary Image Downsampling</title>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="cndk.beforeafter.js"></script>
+    <link href="cndk.beforeafter.css" rel="stylesheet">
+
+    <!-- 
+    This page uses the cndk.beforeafter.js library, which is licensed under the MIT License.
+    Copyright (c) 2020 Ilker Cindik
+    For full license text, see: https://opensource.org/licenses/MIT
+    -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.5em;
+            text-align: center;
+        }
+        h3 {
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .authors, .affiliation, .conference {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .conference a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .conference a:hover {
+            text-decoration: underline;
+        }
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 20px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 16px;
+            min-width: 120px;
+            justify-content: center;
+        }
+        .link-button:hover {
+            background-color: #555;
+        }
+        .link-button img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .image-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .abstract {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        .abstract h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .abstract p {
+            text-align: justify;
+            margin-bottom: 0;
+            font-size: 1.05em;
+        }
+        .benefits {
+            margin-top: 40px;
+        }
+        .benefits h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .benefit {
+            margin-bottom: 40px;
+        }
+        .benefit h3 {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .benefit h5 {
+            text-align: center;
+        }
+        .sub-benefit {
+            margin-bottom: 30px;
+        }
+        .sub-benefit h4 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .benefit-images {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .benefit-image {
+            flex-basis: calc(50% - 10px);
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .benefit-image img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .benefit-image p {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .video-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .video-container h2 {
+            margin-bottom: 20px;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        @media (max-width: 768px) {
+            .benefit-images {
+                flex-direction: column;
+                align-items: center;
+            }
+            .benefit-image {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* 針對 Better Visualization 部分的特殊處理 */
+        .benefit:last-child .benefit-image {
+            max-width: 300px;
+        }
+        .benefit:last-child .benefit-image img {
+            aspect-ratio: auto;
+            object-fit: contain;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Topology-Preserving Binary Image Downsampling</h1>
+    
+    <div class="authors">
+        <h2>Chia-Chia Chen &nbsp;&nbsp;&nbsp; Chi-Han Peng</h2>
+    </div>
+    
+    <div class="affiliation">
+        <h2>College of AI, National Yang Ming Chiao Tung University, Taiwan</h2>
+    </div>
+    
+    <div class="conference">
+        <h3>Published at <a href="https://eccv.ecva.net/Conferences/2024">ECCV 2024</a></h3>
+    </div>
+    
+    <div class="links">
+        <a href="https://arxiv.org/abs/2407.17786" class="link-button">
+            <img src="./icon/arxiv.png" alt="arXiv icon"> arXiv
+        </a>
+        <a href='https://github.com/chenchiachia/BinaryImageDownsampling' class="link-button">
+            <img src="./icon/github.png" alt="GitHub icon"> Code
+        </a>
+        <a href='https://www.youtube.com/watch?v=kZvy20CfXuY' class="link-button">
+            <img src="./icon/youtube.png" alt="YouTube icon"> Video
+        </a>
+    </div>
+
+    <div class="image-container">
+        <img src="./img/challenge.png" alt="Binary Image Downsampling Example">
+        <p class="image-caption">Example of binary image downsampling</p>
+    </div>
+    
+    <div class="abstract">
+        <h2>Abstract</h2>
+        <p>We present a novel discrete optimization-based approach to generate downsampled versions of binary images that are guaranteed to have the same topology as the original, measured by the zeroth and first Betti numbers of the black regions, while having good similarity to the original image as measured by IoU and Dice scores. To our best knowledge, all existing binary image downsampling methods don't have such topology-preserving guarantees. We also implemented a baseline morphological operation (dilation)-based approach that always generates topologically correct results. However, we found the similarity scores to be much worse. We demonstrate several applications of our approach. First, generating smaller versions of medical image segmentation masks for easier human inspection. Second, improving the efficiency of binary image operations, including persistent homology computation and short- est path computation, by substituting the original images with smaller ones. In particular, the latter is a novel application that is made feasible only by the full topology-preservation guarantee of our method.</p>
+    </div>
+
+    <div class="benefits">
+        <h2>Benefits of Downsampling Binary Images</h2>
+        
+        <div class="benefit">
+            <h3>Smaller Computational Costs</h3>
+            
+            <div class="sub-benefit">
+                <h4>Persistent Homology (PH) Computation Speed-up</h4>
+                <h5>Cost saving can be done by switching the original image to a topologically correct but downsampled copy with small errors.</h5>
+                
+                <div class="benefit-images">
+                    <div class="benefit-image">
+                        <img src="./img/27_72.png" alt="PH computation 1">
+                        <p>Original mask</p>
+                    </div>
+                    <div class="benefit-image">
+                        <img src="./img/GT_27_72.png.png" alt="PH computation 2">
+                        <p>PH of original mask</p>
+                    </div>
+                </div>
+                <div class="benefit-images">
+                    <div class="benefit-image">
+                        <img src="./img/ours128_27_72.png" alt="Shortest path computation 3">
+                        <p>PH of 4x downsized mask</p>
+                    </div>
+                    <div class="benefit-image">
+                        <img src="./img/ours64_27_72.png" alt="Shortest path computation 4">
+                        <p>PH of 8x downsized mask</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sub-benefit">
+                <h4>Shortest-path Computation Speed-up</h4>
+                <h5>Cost saving can be done solving the shortest paths in downsampled maps and later convert them back.</h5>
+                <div class="benefit-images">
+                    <div class="benefit-image">
+                        <img src="./img/sp.png" alt="Shortest path computation">
+                        <p>Shortest path computation in 2D maps</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="benefit">
+            <h3>Better Visualization</h3>
+            <div class="benefit-images">
+                <div class="benefit-image">
+                    <img src="./img/19_112.jpg" alt="RGB">
+                </div>
+                <div class="beforeafterdrag">
+                    <div data-type="data-type-image">
+                        <div data-type="before">
+                            <img src="./img/mask_19_112.png" width="300" height="300">
+                        </div>
+                        <div data-type="after">
+                            <img src="./img/ours_32_19_112.png" width="300" height="300">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center;">Small details are made larger and more legible<br>(Drag the handle to compare original and ours downsampled result)</p>
+        </div>
+    </div>
+
+    <div class="video-container">
+        <h2>Video Presentation</h2>
+        <div class="video-wrapper">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/kZvy20CfXuY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Chia-Chia Chen, Chi-Han Peng. All rights reserved.</p>
+        <p>This site uses <a href="https://github.com/ilkercndk/before-after-image-slider-js">cndk.beforeafter.js</a>, licensed under the MIT License.</p>
+    </footer>
+
+    <script>
+        /**
+         * This file includes cndk.beforeafter.js
+         * MIT License
+         * Copyright (c) 2020 Ilker Cindik
+         */
+        $(".beforeafterdrag").cndkbeforeafter({
+            mode: "drag",
+            theme: "dark",
+            beforeText: "Input Mask (512)",
+            afterText: "Ours (32)"
+        });
+    </script>
+
+</body>
+</html>
