@@ -108,6 +108,38 @@
             margin-bottom: 0;
             font-size: 1.05em;
         }
+        .results {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .results h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .results-images {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .result-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .result-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .result-image p {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+        }
         .benefits {
             margin-top: 40px;
         }
@@ -138,7 +170,6 @@
             gap: 20px;
             flex-wrap: wrap;
         }
-        
         .benefit-image {
             flex-basis: calc(50% - 10px);
             max-width: 300px;
@@ -146,7 +177,6 @@
             flex-direction: column;
             align-items: center;
         }
-        
         .benefit-image img {
             width: 100%;
             height: auto;
@@ -157,7 +187,6 @@
             padding: 5px;
             margin-bottom: 10px;
         }
-
         .benefit-image p {
             margin-top: 10px;
             font-style: italic;
@@ -165,7 +194,37 @@
             font-size: 0.9em;
             text-align: center;
         }
-
+        .shortest-path-images {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .shortest-path-image {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .shortest-path-image.large {
+            flex: 2;
+        }
+        .shortest-path-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 5px;
+        }
+        .shortest-path-image p {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+            width: 100%;
+        }
         .video-container {
             margin-top: 30px;
             text-align: center;
@@ -188,17 +247,21 @@
             height: 100%;
         }
         @media (max-width: 768px) {
-            .benefit-images {
+            .benefit-images, .shortest-path-images {
                 flex-direction: column;
                 align-items: center;
             }
-            .benefit-image {
+            .benefit-image, .shortest-path-image {
                 flex-basis: 100%;
                 margin-bottom: 20px;
             }
+            .shortest-path-images {
+                height: auto;
+            }
+            .result-image img {
+                width: 100%;
+            }
         }
-
-        /* 針對 Better Visualization 部分的特殊處理 */
         .benefit:last-child .benefit-image {
             max-width: 300px;
         }
@@ -251,6 +314,20 @@
         <p>We present a novel discrete optimization-based approach to generate downsampled versions of binary images that are guaranteed to have the same topology as the original, measured by the zeroth and first Betti numbers of the black regions, while having good similarity to the original image as measured by IoU and Dice scores. To our best knowledge, all existing binary image downsampling methods don't have such topology-preserving guarantees. We also implemented a baseline morphological operation (dilation)-based approach that always generates topologically correct results. However, we found the similarity scores to be much worse. We demonstrate several applications of our approach. First, generating smaller versions of medical image segmentation masks for easier human inspection. Second, improving the efficiency of binary image operations, including persistent homology computation and short- est path computation, by substituting the original images with smaller ones. In particular, the latter is a novel application that is made feasible only by the full topology-preservation guarantee of our method.</p>
     </div>
 
+    <div class="results">
+        <h2>Results</h2>
+        <div class="results-images">
+            <div class="result-image">
+                <img src="./img/result1.png" alt="Result 1">
+                <p>Visualization of <a href="http://ncov-ai.big.ac.cn/download">CNCB</a> lung mask datasets.</p>
+            </div>
+            <div class="result-image">
+                <img src="./img/result2.png" alt="Result 2">
+                <p>Visualization of <a href="https://humansintheloop.org/resources/datasets/semantic-segmentation-dataset-2/">arieal</a> roof mask datasets.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="benefits">
         <h2>Benefits of Downsampling Binary Images</h2>
         
@@ -281,15 +358,20 @@
                         <p>PH of 8x downsized mask</p>
                     </div>
                 </div>
+             
             </div>
             
             <div class="sub-benefit">
                 <h4>Shortest-path Computation Speed-up</h4>
                 <h5>Cost saving can be done solving the shortest paths in downsampled maps and later convert them back.</h5>
-                <div class="benefit-images">
-                    <div class="benefit-image">
-                        <img src="./img/sp.png" alt="Shortest path computation">
+                <div class="shortest-path-images">
+                    <div class="shortest-path-image">
+                        <img src="./img/sp.png" alt="Shortest path computation in 2D maps">
                         <p>Shortest path computation in 2D maps</p>
+                    </div>
+                    <div class="shortest-path-image large">
+                        <img src="./img/fn_fp.png" alt="Example of false negative/postive in downsampled map">
+                        <p>Example of false negative/postive in downsampled map</p>
                     </div>
                 </div>
             </div>
@@ -344,4 +426,4 @@
     </script>
 
 </body>
-</html>
+</html> 
